@@ -3,35 +3,28 @@ import kotlin.math.abs
 fun day01() {
     val lines = readInput("Day01-Input")
 
-    // Part 1
-    val first =  mutableListOf<Int>()
-    val second =  mutableListOf<Int>()
-    lines.forEach { line ->
-        val coordinates = line.split(" ").filterNot(String::isEmpty).map { it.toInt() }
-        first.add(coordinates[0])
-        second.add(coordinates[1])
-    }
+    val (left, right) = lines.map { line ->
+        val leftCoordinates = line.substringBefore(" ").toInt()
+        val rightCoordinates = line.substringAfterLast(" ").toInt()
+        leftCoordinates to rightCoordinates
+    }.unzip()
 
-    part1(first, second).println()
-    part2(first, second).println()
+    part1(left, right).println()
+    part2(left, right).println()
 }
 
-private fun part1(first: MutableList<Int>, second: MutableList<Int>) : Int {
-    first.sort()
-    second.sort()
-
-    val min = first.size.coerceAtMost(second.size)
-
-    var sum = 0
-    for (i in 0..<min) {
-        sum += abs(first[i] - second[i])
+private fun part1(first: List<Int>, second: List<Int>) : Int {
+    check(first.size == second.size) {
+        "Precondition failed. We should have the name number of coordinates."
     }
 
-    return sum
+    return first.sorted().zip(second.sorted()).sumOf { (left, right) ->
+        abs(left - right)
+    }
 }
 
 
-fun part2(first: MutableList<Int>, second: MutableList<Int>) : Int {
+fun part2(first: List<Int>, second: List<Int>) : Int {
     return first.sumOf { left ->
         left * second.count { left == it }
     }
