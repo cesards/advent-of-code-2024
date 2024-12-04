@@ -1,6 +1,6 @@
 import kotlin.math.abs
 
-fun day01() {
+fun main() {
     val lines = readInput("Day01-Input")
 
     val (left, right) = lines.map { line ->
@@ -24,7 +24,7 @@ private fun part1(first: List<Int>, second: List<Int>) : Int {
 }
 
 
-fun part2(first: List<Int>, second: List<Int>) : Int {
+private fun part2(first: List<Int>, second: List<Int>) : Int {
     return first.sumOf { left ->
         left * second.count { left == it }
     }
