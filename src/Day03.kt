@@ -20,7 +20,7 @@ private fun part01(lines: List<String>) {
 }
 
 private fun part02(lines: List<String>) {
-    val donts = Regex("don't\\(\\)(.*?)do\\(\\)")
+    val donts = Regex("don't\\(\\)(.*?)(do\\(\\))?") // fix this because "aasdasddon't()asdasdo()adasdasdasdaa" wouldn't take anything after do()
     val regex = Regex("mul\\(\\d{1,3},\\d{1,3}\\)")
 
     // We need to put lines together if we want to make this work.
@@ -36,5 +36,12 @@ private fun part02(lines: List<String>) {
                 it.value.substringAfter(",").substringBefore(")").toInt()
         sum += aha
     }
-    println(sum)
+    println(sum) // 92626942
 }
+
+// https://www.rexegg.com/regex-best-trick.php
+
+//override fun part2(): Long =
+//    Regex("""(?s)don't\(\).*?(?:do\(\)|$)|mul\((\d+),(\d+)\)""")
+//        .findAll(input)
+//        .sumOf { mr -> (mr.groupValues[1].toLongOrNull() ?: 0L) * (mr.groupValues[2].toLongOrNull() ?: 0L) }
