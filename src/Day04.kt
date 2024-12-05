@@ -1,29 +1,33 @@
 fun main() {
     val lines = readInput("Day04-Input")
-    part01(lines)
-    part02(lines)
-}
 
-private fun part01(lines: List<String>) {
     val board = Array(lines.size) { row ->
         val chars = lines[row].toCharArray()
         Array(chars.size) { col ->
             chars[col]
         }
     }
+    part01(board)
+    part02(board)
+}
 
+private fun part01(board: Array<Array<Char>>) {
     var sum = 0
     board.forEachIndexed { row, chars ->
         chars.forEachIndexed { column, char ->
             sum += part01search(row, column, board, 1)
         }
     }
-
     println(sum)
-    // 2390
 }
 
-private fun part01search(row: Int, column: Int, board: Array<Array<Char>>, step: Int, part01Pattern: Part01Pattern? = null): Int {
+private fun part01search(
+    row: Int,
+    column: Int,
+    board: Array<Array<Char>>,
+    step: Int,
+    part01Pattern: Part01Pattern? = null
+): Int {
     return when {
         (row < 0 || row >= board.size) -> 0
         (column < 0 || column >= board[row].size) -> 0
@@ -71,6 +75,31 @@ private enum class Part01Pattern {
 }
 
 
-private fun part02(lines: List<String>) {
+private fun part02(board: Array<Array<Char>>) {
+    var sum = 0
+    board.forEachIndexed { row, chars ->
+        chars.forEachIndexed { column, char ->
+            if (row > 0 && row < board.size - 1 && column > 0 && column < chars.size - 1 && board[row][column] == 'A') {
+                sum += part02search(row, column, board)
+            }
+        }
+    }
+    println(sum)
+}
 
+private fun part02search(
+    row: Int,
+    column: Int,
+    board: Array<Array<Char>>,
+): Int {
+    val firstDiagonal: Boolean = ((board[row - 1][column - 1] == 'S' && board[row + 1][column + 1] == 'M') ||
+            (board[row - 1][column - 1] == 'M' && board[row + 1][column + 1] == 'S'))
+
+    val secondDiagonal: Boolean = ((board[row - 1][column + 1] == 'S' && board[row + 1][column - 1] == 'M') ||
+            (board[row - 1][column + 1] == 'M' && board[row + 1][column - 1] == 'S'))
+
+    return when {
+        firstDiagonal && secondDiagonal -> 1
+        else -> 0
+    }
 }
